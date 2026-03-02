@@ -1,0 +1,6 @@
+server:
+  # Expose the KMIP port on the Vault pods
+  extraPorts:
+    - containerPort: 5696
+      name: kmip
+      protocol: TCP
