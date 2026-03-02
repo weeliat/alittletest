@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: lb-app-cert
+  namespace: default
+spec:
+  secretName: lb-app-tls # This secret will be mounted into the pod
+  issuerRef:
+    name: vault-cluster-issuer
+    kind: ClusterIssuer
+  commonName: lb.example.com
+  dnsNames:
+    - lb.example.com

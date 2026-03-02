@@ -1,0 +1,24 @@
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultConnection
+metadata:
+  name: vault-connection
+  namespace: vso-system
+spec:
+  address: "https://vault.example.com:8200"
+  caCertSecretRef: vault-tls-ca
+  skipTLSVerify: false
+
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: vault-auth
+  namespace: app-namespace
+spec:
+  method: kubernetes
+  mount: kubernetes
+  kubernetes:
+    role: vso-pki-role
+    serviceAccount: vso-app-sa
+  vaultConnectionRef: vault-connection

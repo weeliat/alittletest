@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+  namespace: default
+  annotations:
+    # Triggers cert-manager to automatically fetch a certificate from Vault
+    cert-manager.io/cluster-issuer: "vault-cluster-issuer"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - app.example.com
+      # cert-manager will create this Secret automatically containing the Vault cert
+      secretName: app-example-tls 
+  rules:
+    - host: app.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-service
+                port:
+                  number: 80
