@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1 # Update if using a recent Traefik version
+kind: IngressRouteTCP
+metadata:
+  name: vault-kmip
+  namespace: vault
+spec:
+  entryPoints:
+    - kmip
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: vault-kmip
+          port: 5696
+  tls:
+    passthrough: true
