@@ -1,0 +1,8 @@
+dn: CN=test-group,OU=HashiVault,DC=adtesting,DC=lab
+changetype: modify
+delete: member
+member: CN={{.Username}},OU=HashiVault,DC=adtesting,DC=lab
+-
+
+dn: CN={{.Username}},OU=HashiVault,DC=adtesting,DC=lab
+changetype: delete

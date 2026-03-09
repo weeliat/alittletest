@@ -1,0 +1,31 @@
+# =============================================================
+# SOFT ROLLBACK: Remove from group and disable account
+# Use when you want to preserve the object for recovery
+# =============================================================
+
+dn: CN=test-group,OU=HashiVault,DC=adtesting,DC=lab
+changetype: modify
+delete: member
+member: CN={{.Username}},OU=HashiVault,DC=adtesting,DC=lab
+-
+
+dn: CN={{.Username}},OU=HashiVault,DC=adtesting,DC=lab
+changetype: modify
+replace: userAccountControl
+userAccountControl: 514
+-
+
+# =============================================================
+# HARD ROLLBACK: Remove from group and delete account entirely
+# Use when you want a full teardown (same effect as deletion.ldif)
+# Apply this block only after soft rollback is confirmed unnecessary
+# =============================================================
+
+# dn: CN=test-group,OU=HashiVault,DC=adtesting,DC=lab
+# changetype: modify
+# delete: member
+# member: CN={{.Username}},OU=HashiVault,DC=adtesting,DC=lab
+# -
+#
+# dn: CN={{.Username}},OU=HashiVault,DC=adtesting,DC=lab
+# changetype: delete
