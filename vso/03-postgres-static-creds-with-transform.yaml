@@ -1,0 +1,24 @@
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultDynamicSecret
+metadata:
+  name: postgres-static-creds-url
+  namespace: app-namespace
+  annotations:
+    myapp.config/postgres-host: "postgres.default.svc.cluster.local:5432"
+spec:
+  vaultAuthRef: vault-auth
+  mount: database
+  path: static-creds/my-static-role
+  renewalPercent: 67
+  destination:
+    create: true
+    name: postgres-static-secret-url
+    transformation:
+      excludes:
+        - .*    # drop raw username/password keys; only expose the rendered URL
+      templates:
+        url:
+          text: |
+            {{- $host := get .Annotations "myapp.config/postgres-host" -}}
+            {{- printf "postgresql://%s:%s@%s/mydb?sslmode=disable" (get .Secrets "username") (get .Secrets "password") $host -}}

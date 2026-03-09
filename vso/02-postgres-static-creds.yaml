@@ -1,0 +1,24 @@
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultDynamicSecret
+metadata:
+  name: postgres-static-creds
+  namespace: app-namespace
+spec:
+  # Reference the VaultAuth defined in 01-conn-auth.yaml
+  vaultAuthRef: vault-auth
+
+  # Mount path of the database secrets engine
+  mount: database
+
+  # static-creds/<role-name> — distinguishes static from dynamic (creds/<role>)
+  path: static-creds/my-static-role
+
+  # Re-read at 67% of the rotation period to pick up rotated passwords before expiry.
+  # With a 1h Vault rotation_period this triggers a re-read at ~40 minutes.
+  renewalPercent: 67
+
+  # Write the synced secret into a Kubernetes Secret
+  destination:
+    create: true
+    name: postgres-static-secret
