@@ -4,7 +4,8 @@
 # =============================================================
 
 # Read static credentials for RDP accounts
-path "ldap/static-creds/rdp-static-role" {
+# Note: LDAP secrets engine uses singular "static-cred" (not "static-creds")
+path "ldap/static-cred/rdp-static-role" {
   capabilities = ["read"]
 }
 
